@@ -1,12 +1,26 @@
 from fastapi import FastAPI, UploadFile, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 import uuid
 from app.llm import get_text_from_llm, LLMError
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3001"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
+
 upload_dir = Path("./uploads") #begins where uvicorn was started (/server), therefore uploads go into /server/uploads
 upload_dir.mkdir(exist_ok=True)
+
+@app.get("/hello")
+def greet():
+    return {"message": "Hello World!"}
+
 
 
 @app.post('/photos')
@@ -32,14 +46,14 @@ async def create_upload(photo: UploadFile):
         buffer.write(content_bytes)
 
     try:
-        text = await get_text_from_llm(content_bytes, photo.content_type)
+        menu = await get_text_from_llm(content_bytes, photo.content_type)
 
     except LLMError as e:
         raise HTTPException(status_code=502, detail=f"Error is: {e}")
 
 
 
-    return {"original": photo.filename, "new_file_name": unique_filename,  "file_size": photo.size, "content_type": photo.content_type, "response": text, "successful": True}
+    return {"original": photo.filename, "new_file_name": unique_filename,  "file_size": photo.size, "content_type": photo.content_type, "menu": menu, "successful": True}
 
 
 # @app.post("/photos/{unique_filename}/extract")
