@@ -10,6 +10,6 @@ class Special(BaseModel):
 
 class Menu(BaseModel):
     specials: List[Special]
-    week: date | None
+    day: date | None
     concerns: str | None
     is_special: bool
