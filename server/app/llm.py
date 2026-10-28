@@ -30,7 +30,13 @@ async def get_text_from_llm(content_bytes: bytes, content_type: Literal['image/j
             model="claude-opus-5-5",
             max_tokens=2048,
             system= (
-                "You are a text extracter.\n"
+                "You are a text extractor being provided a photo of a restaurant's specials of the week.\n" 
+                "Only extract text visible in the provided photo.\n"
+                "Put anything unreadable or ambiguous in concerns.\n"
+                "Set is_special to false if the photo isn't a specials menu.\n"
+                "Use null for a price that isn't shown, rather than guessing.\n"
+                "Mispellings should be noted in concerns such as: 'Misspelled words: (list of mispelled words). Correct Spelling: (list of properly spelled words in same order as misspelled words.)', not fixed directly.\n"
+                "Date in the photo is in format: MM-DD-YYYY."
                 ),
             messages = [
                     {
