@@ -10,6 +10,7 @@ export default function UploadForm() {
     const [draft, setDraft] = useState<Menu>();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string>()
+    const [displayConcerns, setDisplayConcerns] = useState(false);
 
 
     console.log("Component rendering...");
@@ -65,6 +66,15 @@ export default function UploadForm() {
     const handleContinue = (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log(draft)
+    }
+
+    const handleToggleConcerns = (e: React.SubmitEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if (displayConcerns) {
+            setDisplayConcerns(false);
+        } else {
+            setDisplayConcerns(true);
+        }
     }
 
 
