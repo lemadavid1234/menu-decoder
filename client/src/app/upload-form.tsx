@@ -6,6 +6,7 @@ import { useState } from 'react'
 export default function UploadForm() {
 
     const [menu, setMenu] = useState<Menu>();
+    const [isSubmitted, setIsSubmitted] = useState(false);
     const [draft, setDraft] = useState<Menu>();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string>()
@@ -20,6 +21,7 @@ export default function UploadForm() {
         console.log("Selected file: ", formData.get('photo'))
 
         try {
+            setIsSubmitted(false);
             setIsLoading(true);
             setError(undefined);
             setMenu(undefined);
@@ -40,6 +42,7 @@ export default function UploadForm() {
                 throw new Error(`Submitted photo was not a menu`);
             }
 
+            setIsSubmitted(true);
             setMenu(data.menu);
             setDraft(data.menu);
             console.log("Backend response payload aka body of Response object as JSON object:", data);
@@ -67,13 +70,15 @@ export default function UploadForm() {
 
     return (
         //entire component
-        <div className='p-4 max-w-2xl border-4 border-white'>
+        <div className='p-4 max-w-2xl min-w-2xl border-4 border-white'>
 
             {/* Choose File & Submit Button field */}
-            <form onSubmit={handleSubmit} className='flex justify-between'>
-                <input required type="file" name="photo" className='text-sm file:px-1 file:mr-4 file:border'/>
-                <button className="border rounded border-white bg-white text-black text-sm" type="submit" disabled={isLoading}>Submit</button>
-            </form>
+            {!isSubmitted && (
+                <form onSubmit={handleSubmit} className='flex justify-between'>
+                    <input required type="file" name="photo" className='text-sm file:px-1 file:mr-4 file:border' />
+                    <button className="border rounded border-white bg-white text-black text-sm" type="submit" disabled={isLoading}>Submit</button>
+                </form>
+            )}
 
             {/* Loading state */}
             {isLoading && (
@@ -105,18 +110,23 @@ export default function UploadForm() {
                         ))}
                     </ul>
 
-                    {/* concerns */}
+                    {/* concerns & toggle on/off concerns */}
                     {draft.concerns && (
                         <>
-                            <div className='border border-white'>
-                                <h3>Concerns</h3>
-                                <p>{draft.concerns}</p>
-                            </div>
+                            <form onSubmit={handleToggleConcerns}>
+                                <button type="submit" className='pl-2 my-2'>{displayConcerns ? 'Hide Concerns' : 'Display Concerns'}</button>
+                            </form>
+                            {displayConcerns && (
+                                <div className='border-white border-3 p-4'>
+                                    <p>{draft.concerns}</p>
+                                </div>
+                            )}
                         </>
                     )}
 
+
                     {/* Continue button */}
-                    <p className='font-bold'>After reviewing the extracted menu, edit mistakes (if any).</p>
+                    <p className='font-bold my-2 text-center'>Edit any mistakes. Hit Continue when finished.</p>
 
                     <form onSubmit={handleContinue} className='text-center'>
                         <button type="submit" className='border rounded border-white bg-white text-black text-sm'>Continue</button>
