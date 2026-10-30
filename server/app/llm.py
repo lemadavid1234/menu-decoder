@@ -1,20 +1,14 @@
-from anthropic import AsyncAnthropic
+from anthropic import Anthropic
 from anthropic import APIError
-from dotenv import load_dotenv
-from pathlib import Path
-import os
 import base64
 from typing import Literal
 
 from app.schemas import Special, Menu
+from app.config import ANTHROPIC_API_KEY
 
-#loads .env file from folder of the file that called it /server/app and walks upward (server/app/.env -> /server/.env)
-#stops at the first .env it finds, stops at /server/.env
-# load_dotenv() --> also works 
-load_dotenv(Path(__file__).parent.parent / ".env")
 
-client = AsyncAnthropic(
-    api_key=os.environ["ANTHROPIC_API_KEY"] # raises KeyError if not found: 'ANTHROPIC_API_KEY'
+client = Anthropic(
+    api_key=ANTHROPIC_API_KEY
 )
 
 class LLMError(Exception):
@@ -22,11 +16,11 @@ class LLMError(Exception):
 
 
 # function that prompts Anthropic
-async def get_text_from_llm(content_bytes: bytes, content_type: Literal['image/jpeg', 'image/png']) -> Menu:
+def get_text_from_llm(content_bytes: bytes, content_type: Literal['image/jpeg', 'image/png']) -> Menu:
 
     base64_encoded_string = base64.b64encode(content_bytes).decode("utf-8")
     try:
-        response = await client.messages.parse(
+        response = client.messages.parse(
             model="claude-opus-5-5",
             max_tokens=2048,
             system= (
@@ -38,7 +32,7 @@ async def get_text_from_llm(content_bytes: bytes, content_type: Literal['image/j
                 "Mispellings should be noted in concerns such as: 'Misspelled words: (list of mispelled words). Correct Spelling: (list of properly spelled words in same order as misspelled words.)', not fixed directly.\n"
                 "Date in the photo is in format: MM-DD-YYYY."
                 ),
-            messages = [
+            messages = [ 
                     {
                         "role": "user",
                         "content": [

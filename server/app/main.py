@@ -24,7 +24,7 @@ def greet():
 
 
 @app.post('/photos')
-async def create_upload(photo: UploadFile):
+def create_upload(photo: UploadFile):
 
     # uploading file with NO filename
     if not photo.filename:
@@ -38,7 +38,7 @@ async def create_upload(photo: UploadFile):
     unique_filename = f"{uuid.uuid4()}_{Path(photo.filename).stem}.{photo.content_type.split("/")[-1]}"
 
 
-    content_bytes = await photo.read()
+    content_bytes = photo.file.read()
 
     # saves to local disk for manual checking if uploaded file wasn't corrupted and is the same one
     destination = f"{upload_dir}/{unique_filename}"
@@ -46,7 +46,7 @@ async def create_upload(photo: UploadFile):
         buffer.write(content_bytes)
 
     try:
-        menu = await get_text_from_llm(content_bytes, photo.content_type)
+        menu = get_text_from_llm(content_bytes, photo.content_type)
 
     except LLMError as e:
         raise HTTPException(status_code=502, detail=f"Error is: {e}")
