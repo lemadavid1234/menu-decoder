@@ -27,7 +27,7 @@ export default function UploadForm() {
             setError(undefined);
             setMenu(undefined);
             setDraft(undefined);
-            const response = await fetch('http://localhost:8001/photos', {
+            const response = await fetch('http://localhost:8001/api/photos', {
                 method: "POST",
                 body: formData,
             });
@@ -63,9 +63,41 @@ export default function UploadForm() {
     }
 
 
-    const handleContinue = (e: React.SubmitEvent<HTMLFormElement>) => {
+    const handleContinue = async (e: React.SubmitEvent<HTMLFormElement>) => {
+        // send a post request to fastapi endpoint, which will upload Menu item to database
         e.preventDefault();
         console.log(draft)
+
+        if (!draft) {
+            throw new Error("Menu is null, please fill out the fields before continuing.")
+        }
+
+        //create a finalMenu with only desired fields, (removing concerns and is_special)
+        //not required to do since Pydantic would ignore extra fields anyway, just for organization
+        const finalMenu: ConfirmedMenu = {
+            day: draft.day,
+            specials: draft.specials
+        }
+
+        try {
+            const response = await fetch('http://localhost:8001/api/menus', {
+                method: 'POST',
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(finalMenu) //endpoint takes a Pydantic model, so FastAPI expects JSON in the body
+            })
+
+            const data = await response.json(); //response body should contain id
+
+            if (!response.ok) {
+                throw new Error(`Server error: ${response.status} with fastapi backend detail: ${data.detail}`)
+            }
+            
+            const id = data.id;
+            console.log(`this is the uploaded menu's id: ${id}`);
+
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     const handleToggleConcerns = (e: React.SubmitEvent<HTMLFormElement>) => {

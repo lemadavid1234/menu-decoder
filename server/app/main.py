@@ -1,8 +1,15 @@
 from fastapi import FastAPI, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi import Depends
+
 from pathlib import Path
 import uuid
+
+from app.database import get_db, Session, engine, Base
 from app.llm import get_text_from_llm, LLMError
+# from app.schemas import Menu #note: from app import models, schema --> use models.Menu and schemas.Menu to avoid overwriting each other
+from app import models
+from app import schemas
 
 app = FastAPI()
 
@@ -16,6 +23,10 @@ app.add_middleware(
 
 upload_dir = Path("./uploads") #begins where uvicorn was started (/server), therefore uploads go into /server/uploads
 upload_dir.mkdir(exist_ok=True)
+
+# once database and models classes are registered, create tables
+Base.metadata.create_all(engine)
+
 
 @app.get("/hello")
 def greet():
@@ -56,16 +67,26 @@ def create_upload(photo: UploadFile):
     return {"original": photo.filename, "new_file_name": unique_filename,  "file_size": photo.size, "content_type": photo.content_type, "menu": menu, "successful": True}
 
 
-# @app.post("/photos/{unique_filename}/extract")
-# async def extract_photo(unique_filename: str, content_type: str):
+@app.post("/api/menus")
+def create_menu(confirmed_menu: schemas.ConfirmedMenu, db: Session = Depends(get_db)):
 
-#     relative_path = "photos/" + Path(unique_filename).name
+    #pydantic models describe JSON, SQLAlchemy models describe tables
+    db_menu = models.Menu(day=confirmed_menu.day)
+    for index, s in enumerate(confirmed_menu.specials):
+        special = models.Special(sentence=s.sentence, price=s.price, position=index)
+        db_menu.specials.append(special) 
+    
+    #db.add() only accepts SQLAlchemy model instances
+    db.add(db_menu)
+    db.commit() #postgres assigns id after commit
+    db.refresh(db_menu) #reload the db_menu object's columns, so it now has id
 
-#     if not Path(relative_path).is_file():
-#         raise HTTPException(status_code=404, detail='File name provided does not match any existing file in /uploads')
+    return {"id": db_menu.id}
 
-#     # mime_type = 
-#     # content_bytes = 
-#     # content = await get_text_from_llm(content_bytes, mime_type)
 
-#     return { "content": "this should return all extracted words from photo by LLM", "path_to_file": relative_path}
+
+@app.get("/api/menus/{menu_id}")
+def get_menu_by_id(menu_id: int, db: Session = Depends(get_db)):
+    return {"successfully retrieved menu": "menu object"}
+
+
