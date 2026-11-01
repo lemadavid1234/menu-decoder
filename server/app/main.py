@@ -23,7 +23,7 @@ def greet():
 
 
 
-@app.post('/photos')
+@app.post('/api/photos')
 def create_upload(photo: UploadFile):
 
     # uploading file with NO filename
