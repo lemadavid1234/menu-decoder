@@ -9,7 +9,7 @@ class Menu(Base):
     __tablename__ = "menus"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    day: Mapped[Optional[date]] = mapped_column() #so we can sort by date, is nullable because of schema
+    day: Mapped[date] = mapped_column() #so we can sort by date
     specials: Mapped[List["Special"]] = relationship(order_by="Special.position")
 
 
