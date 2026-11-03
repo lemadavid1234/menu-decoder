@@ -85,8 +85,35 @@ def create_menu(confirmed_menu: schemas.ConfirmedMenu, db: Session = Depends(get
 
 
 
-@app.get("/api/menus/{menu_id}")
+@app.get("/api/menus/{menu_id}", response_model=schemas.ConfirmedMenu)
 def get_menu_by_id(menu_id: int, db: Session = Depends(get_db)):
-    return {"successfully retrieved menu": "menu object"}
 
+    #returns SQLAlchemy object, which represents a database row
+    db_menu = db.get(models.Menu, menu_id)
+
+    if not db_menu or db_menu.id != menu_id:
+        raise HTTPException(status_code=404, detail='Menu not found')
+    
+    return db_menu
+
+
+
+@app.post("/api/menus/{menu_id}/explanation")
+def create_menu_explanation(menu_id: int, db: Session = Depends(get_db)):
+
+    # idempotency check, if menu_id/explation already exists, return ExplainedMenu
+    db_menu = db.get(models.Menu, menu_id)
+    if not db_menu:
+        raise HTTPException(status_code=404, detail='Menu not found')
+
+    #convert menu (database row) into a schemas.ConfirmedMenu
+    confirmed_menu = schemas.ConfirmedMenu.model_validate(db_menu)
+    
+    try:
+        explained_menu = get_explanation_from_llm(confirmed_menu)
+    except LLMError as e:
+        raise HTTPException(status_code=500, detail=f"error is {e}")
+
+
+    return explained_menu
 
