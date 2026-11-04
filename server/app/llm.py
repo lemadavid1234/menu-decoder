@@ -15,7 +15,7 @@ class LLMError(Exception):
     pass
 
 
-
+EXTRACTION_MODEL = "claude-haiku-5-5"
 EXPLANATION_MODEL = "claude-opus-5-5"
 
 
@@ -25,8 +25,8 @@ def get_text_from_llm(content_bytes: bytes, content_type: Literal['image/jpeg', 
     base64_encoded_string = base64.b64encode(content_bytes).decode("utf-8")
     try:
         response = client.messages.parse(
-            model="claude-haiku-5-5",
-            max_tokens=2048,
+            model=EXTRACTION_MODEL,
+            max_tokens=1024,
             system= (
                 "You are a text extractor being provided a photo of a restaurant's specials of the week.\n" 
                 "Only extract text visible in the provided photo.\n"
