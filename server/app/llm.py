@@ -3,7 +3,7 @@ from anthropic import APIError
 import base64
 from typing import Literal
 
-from app.schemas import Special, Menu
+from app.schemas import Menu, ConfirmedMenu, ExplanationFieldsList
 from app.config import ANTHROPIC_API_KEY
 
 
@@ -15,13 +15,17 @@ class LLMError(Exception):
     pass
 
 
+
+EXPLANATION_MODEL = "claude-opus-5-5"
+
+
 # function that prompts Anthropic
 def get_text_from_llm(content_bytes: bytes, content_type: Literal['image/jpeg', 'image/png']) -> Menu:
 
     base64_encoded_string = base64.b64encode(content_bytes).decode("utf-8")
     try:
         response = client.messages.parse(
-            model="claude-opus-5-5",
+            model="claude-haiku-5-5",
             max_tokens=2048,
             system= (
                 "You are a text extractor being provided a photo of a restaurant's specials of the week.\n" 
@@ -54,7 +58,7 @@ def get_text_from_llm(content_bytes: bytes, content_type: Literal['image/jpeg', 
             output_format=Menu,
         )
     except APIError as e:
-        raise LLMError(f"Claude Issue: {e}") from e
+        raise LLMError(f"Claude Issue during extraction pipeline {e}") from e
     print("-------------------------------\n")
     print("Raw Response: ", response)
     print("-------------------------------\n")
@@ -67,9 +71,56 @@ def get_text_from_llm(content_bytes: bytes, content_type: Literal['image/jpeg', 
     
     structured_response = response.parsed_output
     if not isinstance(structured_response, Menu):
-        raise LLMError(f"Could not provide proper Menu structured output")
+        raise LLMError("Could not provide proper Menu structured output")
     
     return structured_response
 
 
 
+
+
+def get_explanation_from_llm(menu: ConfirmedMenu) -> ExplanationFieldsList:
+
+
+    #claude takes input as text, therefore first have to create a text block from menu parameter
+
+    menu_json = menu.model_dump_json()
+
+    try:
+        response = client.messages.parse(
+            model=EXPLANATION_MODEL,
+            max_tokens=4096,
+            system= (
+                "You are an incredibly knowledgeable food explainer being provided a list of a restaurant's specials of the week.\n" 
+                "For each special return the following fields:\n"
+                "- position: index position starting from 0, one entry per special.\n"
+                "- possible_ingredients: list of ingrediants explicitly mentioned or highly likely to be in the dish.\n"
+                "- dietary_restrictions: applicable dietary tags (e.g., 'Vegan', 'Gluten-Free', 'Halal'). Return an empty list if none apply.\n"
+                "- allergens: List of common allergens present (e.g., 'Nuts', 'Dairy', 'Soy', 'Shellfish'). Return an empty list if none apply.\n"
+                "- suggested_wine_pairing: Recommended wine types or specific varietals that pair well with this item.\n"
+                "- description: A rich sensory explanation of the item's flavor profile, texture, and preparation style.\n"
+                "- origin: The geographic or cultural origin of the dish (e.g., 'Tuscany, Italy'). Leave as null if unknown.\n"
+                "- pronunciation: A simple phonetic spelling guide for the dish name (e.g., 'gno-kee' for Gnocchi)\n"
+                ),
+            messages = [
+                    {
+                        "role": "user",
+                        "content": [
+                            { 
+                                "type": "text",
+                                "text": f"The following is a list of specials: {menu_json} "
+                            },
+                        ],
+                    }
+                ],
+            output_format=ExplanationFieldsList,
+        )
+    except APIError as e:
+        raise LLMError(f"Claude Issue during Explanation Pipeline: {e}") from e
+
+    structured_response = response.parsed_output
+
+    if not isinstance(structured_response, ExplanationFieldsList):
+        raise LLMError("Could not provided proper ExplanationFieldsList structured output")
+
+    return structured_response
