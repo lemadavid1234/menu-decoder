@@ -23,8 +23,8 @@ I work as a server at an Italian restaraunt, and the specials change every week.
 ## Status
 - [X] Structured extraction with Claude
 - [X] Editable review screen
-- [ ] Dish explanations
-- [ ] Saved menu history
+- [X] Dish explanations
+- [X] Saved menu history
 - [ ] Deployment
 
 ## Tech Stack
@@ -35,7 +35,7 @@ I work as a server at an Italian restaraunt, and the specials change every week.
 | Styling | **Tailwind CSS** | Utility classes keep layout and styling next to the markup. |
 | Backend | **FastAPI (Python)**, Pydantic | Synchronous endpoints, since each request spends most of its time waiting on Claude. Also has built in request validation.  One `Menu` model defines Claude's structured output *and* the API response, so the frontend reads typed fields instead of parsing text. |
 | AI | **Claude API (Anthropic Python SDK)** | Vision reads the photographed board and structured outputs return data that matches the schema. The API key stays on the server, so the browser never calls Claude directly. |
-| Database (planned)| **PostgreSQL (Docker locally) + SQLAlchemy** | Saved weeks need durable storage. A `menus` → `specials` one-to-many schema gives each dish its own row for ingredients, allergens, and pairings. |
+| Database | **PostgreSQL (Docker locally) + SQLAlchemy** | Saved weeks need durable storage. A `menus` → `specials` one-to-many schema gives each dish its own row for ingredients, allergens, and pairings. |
 
 
 ## Architecture
