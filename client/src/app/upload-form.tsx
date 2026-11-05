@@ -62,13 +62,13 @@ export default function UploadForm() {
 
     return (
         //entire component
-        <div className='p-4 max-w-2xl min-w-2xl border-4 border-white'>
+        <div className='p-4 max-w-2xl min-w-2xl border-4 border-foreground'>
 
             {/* Choose File & Submit Button field */}
             {!draft && (
                 <form onSubmit={handleSubmit} className='flex justify-between'>
-                    <input required type="file" name="photo" className='text-sm file:px-1 file:mr-4 file:border' />
-                    <button className="border rounded border-white bg-white text-black text-sm" type="submit" disabled={isLoading}>Submit</button>
+                    <input required type="file" name="photo" className='text-sm file:px-1 file:mr-4 file:border file:border-foreground' />
+                    <button className="border rounded border-foreground bg-foreground text-background text-sm" type="submit" disabled={isLoading}>Submit</button>
                 </form>
             )}
 

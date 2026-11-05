@@ -2,7 +2,7 @@ import UploadForm from "./upload-form";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center font-sans border border-white">
+    <div className="flex flex-col flex-1 items-center justify-center font-sans border border-foreground">
     
       <UploadForm />
 

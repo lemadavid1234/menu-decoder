@@ -1,8 +1,17 @@
 @import "tailwindcss";
 
+/* browser's own built in parts, such as scrollbars, dropdown in <select> and default input backgrounds, 
+don't use CSS variables, their colors come from the CSS color-scheme property */
 :root {
+    color-scheme: dark; 
     --background: #0a0a0a;
     --foreground: #ededed;
+}
+
+.light {
+    color-scheme: light;
+    --background: #ededed;
+    --foreground: #0a0a0a;
 }
 
 @theme inline {

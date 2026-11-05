@@ -73,18 +73,18 @@ export default function ReviewForm({ draft, setDraft }: { draft: Menu; setDraft:
             <h3 className='text-center text-lg'>Week of: {draft.day}</h3>
 
             {/* specials list */}
-            <ul className='border border-white'>
+            <ul className='border border-foreground'>
                 {/* column labels */}
                 <div className='flex justify-between'>
-                    <h1 className='pl-2 border border-white flex-9'>Specials</h1>
-                    <h1 className='border border-white flex-1 min-w-0 text-center'>Price</h1>
+                    <h1 className='pl-2 border border-foreground flex-9'>Specials</h1>
+                    <h1 className='border border-foreground flex-1 min-w-0 text-center'>Price</h1>
                 </div>
 
                 {/* individual rows */}
                 {draft.specials.map((s, index) => (
-                    <li key={index} className='justify-between border border-white flex'>
-                        <textarea className='p-2 border border-white flex-9 min-w-0 resize-none' rows={3} value={s.sentence} onChange={e => setDraft({ ...draft, specials: draft.specials.map((item, i) => i === index ? { ...item, sentence: e.target.value } : item) })} />
-                        <input className='border border-white flex-1 min-w-0 text-center' type="text" placeholder="$" value={s.price ?? ""} onChange={e => setDraft({ ...draft, specials: draft.specials.map((item, i) => i === index ? { ...item, price: e.target.value } : item) })} />
+                    <li key={index} className='justify-between border border-foreground flex'>
+                        <textarea className='p-2 border border-foreground flex-9 min-w-0 resize-none' rows={3} value={s.sentence} onChange={e => setDraft({ ...draft, specials: draft.specials.map((item, i) => i === index ? { ...item, sentence: e.target.value } : item) })} />
+                        <input className='border border-foreground flex-1 min-w-0 text-center' type="text" placeholder="$" value={s.price ?? ""} onChange={e => setDraft({ ...draft, specials: draft.specials.map((item, i) => i === index ? { ...item, price: e.target.value } : item) })} />
                     </li>
                 ))}
             </ul>
@@ -96,7 +96,7 @@ export default function ReviewForm({ draft, setDraft }: { draft: Menu; setDraft:
                         <button type="submit" className='pl-2 my-2'>{displayConcerns ? 'Hide Concerns' : 'Display Concerns'}</button>
                     </form>
                     {displayConcerns && (
-                        <div className='border-white border-3 p-4'>
+                        <div className='border-foreground border-3 p-4'>
                             <p>{draft.concerns}</p>
                         </div>
                     )}
@@ -108,7 +108,7 @@ export default function ReviewForm({ draft, setDraft }: { draft: Menu; setDraft:
             <p className='font-bold my-2 text-center'>Edit any mistakes. Hit Continue when finished.</p>
 
             <form onSubmit={handleContinue} className='text-center'>
-                <button type="submit" className='border rounded border-white bg-white text-black text-sm'>Continue</button>
+                <button type="submit" className='border rounded border-foreground bg-foreground text-background text-sm'>Continue</button>
             </form>
 
         </div>
