@@ -89,7 +89,7 @@ def get_explanation_from_llm(menu: ConfirmedMenu) -> ExplanationFieldsList:
     try:
         response = client.messages.parse(
             model=EXPLANATION_MODEL,
-            max_tokens=4096,
+            max_tokens=8192,
             system= (
                 "You are an incredibly knowledgeable food explainer being provided a list of a restaurant's specials of the week.\n" 
                 "For each special return the following fields:\n"
