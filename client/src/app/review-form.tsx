@@ -1,10 +1,12 @@
 "use client";
 import { Menu, ConfirmedMenu } from "../types/menu";
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 
 export default function ReviewForm({ draft, setDraft }: { draft: Menu; setDraft: (menu: Menu) => void; }) {
     
     const [displayConcerns, setDisplayConcerns] = useState(false);
+    const router = useRouter();
 
     const handleToggleConcerns = (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -47,6 +49,8 @@ export default function ReviewForm({ draft, setDraft }: { draft: Menu; setDraft:
             const id = data.id;
             console.log(`this is the uploaded menu's id: ${id}`);
 
+            navigateToAnalysis(id);
+
         } catch (err) {
             // if (err instanceof Error) {
             //     setError(err.message)
@@ -55,6 +59,11 @@ export default function ReviewForm({ draft, setDraft }: { draft: Menu; setDraft:
             // }
             console.error("Caught the error: ", err);
         }
+    }
+
+
+    function navigateToAnalysis(id: string) {
+        router.push(`/analysis/${id}`)
     }
 
 
