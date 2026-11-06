@@ -25,9 +25,12 @@ export default async function AnalysisPage({ params } : { params: Promise<{id: s
     //return JSX
     return (
         <>
-            <h1 className="text-lg text-center">Analysis page</h1>
-            <div className='border border-white flex flex-col'>
+            {/* <h1 className="text-lg text-center">Analysis page</h1> */}
+            <div className='flex flex-col items-center'>
 
+
+                {/* when only want SpecialsSkeleton Block */}
+                {/* <SpecialsSkeleton menu={menu}/> */}
 
                 <Suspense fallback={<SpecialsSkeleton menu={menu}/>}>
                     <ExplainedSpecials id={id}/>
