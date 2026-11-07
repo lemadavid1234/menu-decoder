@@ -37,10 +37,6 @@ export default function UploadForm() {
                 throw new Error(`Server error: ${response.status} with fastapi backend detail: ${data.detail}`);
             }
 
-            if (!data.menu.is_special) {
-                throw new Error(`Submitted photo was not a menu`);
-            }
-
             setMenu(data.menu);
             setDraft(data.menu);
             console.log("Backend response payload aka body of Response object as JSON object:", data);
@@ -62,7 +58,7 @@ export default function UploadForm() {
 
     return (
         //entire component
-        <div className='p-4 max-w-2xl min-w-2xl border-4 border-foreground'>
+        <div className='p-4 max-w-4xl border-4 border-foreground'>
 
             {/* Choose File & Submit Button field */}
             {!draft && (
@@ -80,7 +76,7 @@ export default function UploadForm() {
             )}
 
             {/* entire menu object, including concerns */}
-            {draft?.is_special && (
+            {draft && (
                 <ReviewForm draft={draft} setDraft={setDraft}/>
             )}
 

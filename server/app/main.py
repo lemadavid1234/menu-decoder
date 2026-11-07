@@ -69,6 +69,7 @@ def create_upload(photo: UploadFile):
 
 @app.post("/api/menus")
 def create_menu(confirmed_menu: schemas.ConfirmedMenu, db: Session = Depends(get_db)):
+    #confirmed_menu.specials has a min_length of 1, FastAPI will return 422 if user sends a menu with 0 specials
 
     #pydantic models describe JSON, SQLAlchemy models describe tables
     db_menu = models.Menu(day=confirmed_menu.day)
