@@ -62,8 +62,9 @@ def create_upload(photo: UploadFile):
     except LLMError as e:
         raise HTTPException(status_code=502, detail=f"Error is: {e}")
 
-
-
+    if not menu.is_special:
+        raise HTTPException(status_code=422, detail='Image uploaded is not a menu.')
+    
     return {"original": photo.filename, "new_file_name": unique_filename,  "file_size": photo.size, "content_type": photo.content_type, "menu": menu, "successful": True}
 
 

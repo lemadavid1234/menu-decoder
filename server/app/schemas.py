@@ -19,7 +19,7 @@ class Menu(BaseModel):
 
 # input for claude llm
 class ConfirmedMenu(BaseModel):
-    specials: List[Special]
+    specials: List[Special] = Field(min_length=1) #rejects "specials": [] therefore list needs at least 1 item
     day: date
 
     #model_config is a setting that Pydantic reads from classes that inherit from Basemodel
