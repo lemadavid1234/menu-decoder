@@ -107,6 +107,10 @@ def create_menu_explanation(menu_id: int, db: Session = Depends(get_db)):
     if not db_menu:
         raise HTTPException(status_code=404, detail='Menu not found')
 
+    # check against empty lists, which were created before the min_length check 
+    if not db_menu.specials:
+        raise HTTPException(status_code=500, detail='Cannot process an empty menu')
+
     # idempotency check, if menu_id with existing explanation already exists, return Menu
     if db_menu.specials[0].description is not None:
         return db_menu
