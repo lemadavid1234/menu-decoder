@@ -3,33 +3,48 @@
 /* browser's own built in parts, such as scrollbars, dropdown in <select> and default input backgrounds, 
 don't use CSS variables, their colors come from the CSS color-scheme property */
 :root {
-    color-scheme: dark; 
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    color-scheme: light; 
+    --burgundy: #8C1C2C;
+    --burgundy-dark: #6E1522;
+    --burgundy-tint: #F6E7E9;
+    --ink: #2B2B2B;
+    --muted:#5F5A55;  
+    --canvas: #F4F1EC;
+    --canvas-alt: #EEEAE3; 
+    --rule: #D9D3CA;
+    --divider: #E8E3DB;
+    --sage: #2F5D34;
+    --sage-tint: #E6F0E6;
+    --skeleton: #E6E0D7;
+    --skeleton-light:#EEE9E2;
+    --skeleton-accent:#F0DDE0; 
+    --surface: #FFFFFF;
 }
 
-.light {
-    color-scheme: light;
-    --background: #ededed;
-    --foreground: #0a0a0a;
-}
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-burgundy: var(--burgundy);
+  --color-burgundy-dark: var(--burgundy-dark);
+  --color-burgundy-tint: var(--burgundy-tint);
+  --color-canvas: var(--canvas);
+  --color-canvas-alt: var(--canvas-alt);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-rule: var(--rule);
+  --color-divider: var(--divider);
+  --color-sage: var(--sage);
+  --color-sage-tint: var(--sage-tint);
+  --color-skeleton: var(--skeleton);
+  --color-skeleton-light: var(--skeleton-light);
+  --color-skeleton-accent: var(--skeleton-accent);
+  --color-surface: var(--surface);
 }
 
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-} */
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--canvas);
+  color: var(--ink);
   font-family: Arial, Helvetica, sans-serif;
 }
