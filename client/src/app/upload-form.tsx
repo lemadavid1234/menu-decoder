@@ -58,7 +58,7 @@ export default function UploadForm() {
 
     return (
         //entire component
-        <div className='p-4 max-w-4xl border-4 border-foreground'>
+        <div className='p-4 border-4 border-foreground w-full max-w-2xl'>
 
             {/* Choose File & Submit Button field */}
             {!draft && (

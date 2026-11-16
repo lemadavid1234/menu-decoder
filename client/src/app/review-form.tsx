@@ -68,7 +68,7 @@ export default function ReviewForm({ draft, setDraft }: { draft: Menu; setDraft:
 
 
     return (
-        <div>
+        <div className="w-full max-w-2xl">
             <h1 className='text-center text-3xl'>Edit Specials List</h1>
             <h3 className='text-center text-lg'>Week of: {draft.day}</h3>
 
