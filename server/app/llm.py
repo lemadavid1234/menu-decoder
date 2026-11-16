@@ -26,7 +26,7 @@ def get_text_from_llm(content_bytes: bytes, content_type: Literal['image/jpeg', 
     try:
         response = client.messages.parse(
             model=EXTRACTION_MODEL,
-            max_tokens=1024,
+            max_tokens=2048,
             system= (
                 "You are a text extractor being provided a photo of a restaurant's specials of the week.\n" 
                 "Only extract text visible in the provided photo.\n"
