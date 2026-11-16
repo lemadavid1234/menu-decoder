@@ -7,6 +7,12 @@
 <img width="49%" alt="Example of menu photo" src="docs/images/IMG_7263.JPG" />
 <img width="49%" alt="Screenshot of displayed specials" src="docs/images/Specials_list_example.png" />
 
+### Upload and Text Extraction Demo
+<img width="600" src="https://i.imgur.com/2ZEd2gY.gif" alt="Demo of Uploading and Rendering Extracted menu" />
+
+### Analysis and Explained Menu Demo
+<img width="600" src="https://i.imgur.com/JjqpqBc.gif" alt="Demo of Analysis and Rendering Explained menu" />
+
 
 ## Why ?
 
