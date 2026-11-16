@@ -10,7 +10,6 @@ don't use CSS variables, their colors come from the CSS color-scheme property */
     --ink: #2B2B2B;
     --muted:#5F5A55;  
     --canvas: #F4F1EC;
-    --canvas-alt: #EEEAE3; 
     --rule: #D9D3CA;
     --divider: #E8E3DB;
     --sage: #2F5D34;
@@ -30,7 +29,6 @@ don't use CSS variables, their colors come from the CSS color-scheme property */
   --color-burgundy-dark: var(--burgundy-dark);
   --color-burgundy-tint: var(--burgundy-tint);
   --color-canvas: var(--canvas);
-  --color-canvas-alt: var(--canvas-alt);
   --color-ink: var(--ink);
   --color-muted: var(--muted);
   --color-rule: var(--rule);
