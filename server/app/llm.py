@@ -2,6 +2,7 @@ from anthropic import Anthropic
 from anthropic import APIError
 import base64
 from typing import Literal
+from pydantic import ValidationError
 
 from app.schemas import Menu, ConfirmedMenu, ExplanationFieldsList
 from app.config import ANTHROPIC_API_KEY
@@ -59,6 +60,8 @@ def get_text_from_llm(content_bytes: bytes, content_type: Literal['image/jpeg', 
         )
     except APIError as e:
         raise LLMError(f"Claude Issue during extraction pipeline {e}") from e
+    except ValidationError as e:
+        raise LLMError(f"Claude response did not match your Menu schema: {e}") from e
     print("-------------------------------\n")
     print("Raw Response: ", response)
     print("-------------------------------\n")
@@ -117,6 +120,8 @@ def get_explanation_from_llm(menu: ConfirmedMenu) -> ExplanationFieldsList:
         )
     except APIError as e:
         raise LLMError(f"Claude Issue during Explanation Pipeline: {e}") from e
+    except ValidationError as e:
+        raise LLMError(f"Claude response did not match your ExplanationFieldsList schema: {e}") from e
 
     structured_response = response.parsed_output
 
