@@ -34,6 +34,16 @@ export default async function AnalysisPage({ params } : { params: Promise<{id: s
             {/* <h1 className="text-lg text-center">Analysis page</h1> */}
             <div className='flex flex-col items-center'>
 
+                <div className="text-center">
+                    <h1 className="text-3xl lg:text-5xl font-bold">{"THIS WEEK'S SPECIALS"}</h1>
+                    <p className="text-sm text-muted">Week of {menu.day} · {menu.specials.length} specials</p>
+                    <p className="text-sm text-muted">
+                        <span className="lg:hidden">Tap</span>
+                        <span className="hidden lg:inline">Click</span>
+                        {" "}a card for allergens, wine pairings and more.
+                    </p>
+                </div>
+
 
                 {/* when only want SpecialsSkeleton Block */}
                 {/* <SpecialsSkeleton menu={menu}/> */}
