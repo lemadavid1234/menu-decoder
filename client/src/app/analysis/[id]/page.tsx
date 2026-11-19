@@ -32,7 +32,7 @@ export default async function AnalysisPage({ params } : { params: Promise<{id: s
     return (
         <>
             {/* <h1 className="text-lg text-center">Analysis page</h1> */}
-            <div className='flex flex-col items-center'>
+            <div className='flex flex-col items-center p-4'>
 
                 <div className="text-center">
                     <h1 className="text-3xl lg:text-5xl font-bold">{"THIS WEEK'S SPECIALS"}</h1>
