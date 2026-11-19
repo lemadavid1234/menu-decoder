@@ -21,7 +21,7 @@ export default async function ExplainedSpecials({ id }: { id: string }) {
 
 
     return (
-        <div className="max-w-5xl py-4">
+        <div className="w-full max-w-5xl py-4">
             <ul className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {menu.specials.map((s) => (
                     <SpecialCard key={s.position} special={s}/>

@@ -46,9 +46,9 @@ export default async function AnalysisPage({ params } : { params: Promise<{id: s
 
 
                 {/* when only want SpecialsSkeleton Block */}
-                {/* <SpecialsSkeleton menu={menu}/> */}
+                {/* <SpecialsSkeleton count={menu.specials.length}/> */}
 
-                <Suspense fallback={<SpecialsSkeleton menu={menu}/>}>
+                <Suspense fallback={<SpecialsSkeleton count={menu.specials.length}/>}>
                     <ExplainedSpecials id={id}/>
                 </Suspense>
 
