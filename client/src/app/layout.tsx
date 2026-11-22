@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Noto_Serif, Great_Vibes } from "next/font/google";
 import "./globals.css";
+import Header from "./header";
 
 const notoSerif = Noto_Serif({ variable: "--font-noto-serif", subsets: ['latin'], weight: ['400', '600', '700']})
 const greatVibes = Great_Vibes({ variable: "--font-great-vibes", subsets: ['latin'], weight: '400'})
@@ -18,6 +19,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${notoSerif.variable} ${greatVibes.variable} antialiased`}
     >
       <body className="flex flex-col bg-canvas text-ink min-h-dvh">
+        <Header/>
         {children}
       </body>
     </html>
