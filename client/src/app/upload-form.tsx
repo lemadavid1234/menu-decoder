@@ -2,21 +2,37 @@
 import { Menu } from '../types/menu';
 import { useState } from 'react'
 import ReviewForm from './review-form';
+import { CameraIcon } from 'lucide-react';
 
 
-export default function UploadForm() {
+export default function UploadForm({ prevSpecials }: { prevSpecials: React.ReactNode} ) {
 
     const [menu, setMenu] = useState<Menu>();
     const [draft, setDraft] = useState<Menu>();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string>()
+    const [previewURL, setPreviewURL] = useState<string>();
+    const [file, setFile] = useState<File | null>(null);
 
 
     console.log("Component rendering...");
 
-    const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const formData = new FormData(e.currentTarget)
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const currentfile = e.target.files?.[0]
+
+        if (!currentfile) return; //if user hits 'Cancel' then file is Undefined
+
+        const objectURL = URL.createObjectURL(currentfile)
+        setPreviewURL(objectURL);
+        setFile(currentfile)
+    }
+
+    const handleClick = async () => {
+        if (!file) return;
+        const formData = new FormData()
+
+        formData.append("photo", file)
 
         console.log("Selected file: ", formData.get('photo'))
 
@@ -58,14 +74,50 @@ export default function UploadForm() {
 
     return (
         //entire component
-        <div className='p-4 border border-ink rounded-2xl w-full max-w-2xl'>
+        <div className='flex flex-col justify-center w-full'>
 
             {/* Choose File & Submit Button field */}
             {!draft && (
-                <form onSubmit={handleSubmit} className='flex flex-col items-center md:flex-row'>
-                    <input required type="file" name="photo" className='flex-1 text-sm file:px-1 file:mr-4 file:border file:border-foreground' />
-                    <button className="border rounded border-foreground bg-foreground text-background text-sm px-2" type="submit" disabled={isLoading}>Submit</button>
-                </form>
+                <div className='flex flex-col gap-8 lg:flex-row'>
+                    <div className='flex-2 bg-surface rounded-2xl p-4'>
+                        {!file ? (
+                            <div className="flex flex-col gap-4 items-center">
+                                <div className="p-4 rounded-full bg-burgundy-tint">
+                                    <CameraIcon className='text-burgundy' />
+                                </div>
+                                <p className='text-xl font-bold'>Got a new specials sheet?</p>
+                                <p className='max-w-xl text-center'>Upload a photo of your specials and we&apos;ll turn it into notes you can study before your shift.</p>
+                                <label className='p-2 bg-burgundy text-white cursor-pointer'>
+                                    Upload your specials
+                                    <input type="file" name="photo" accept="image/png, image/jpeg" onChange={handleFileChange} className='sr-only' />
+                                </label>
+                            </div>
+                        ) : (
+                            <div className="flex flex-col gap-4 lg:flex-row lg:h-96">
+                                <div className="flex-1 flex items-center">
+                                    <img src={previewURL} alt="Selected photo preview" />
+                                </div>
+                                <div className="flex-2 flex flex-col gap-y-2">
+                                    <p>✔ Photo Ready</p>
+                                    <p className='text-2xl font-bold'>Does this look right?</p>
+                                    <p>Before we read it, check that: </p>
+                                    <ul className='list-disc list-inside'>
+                                        <li>The whole sheet is in the photo</li>
+                                        <li>The dish names and prices are sharp, not blurry</li>
+                                        <li>It&apos;s this week&apos;s sheet</li>
+                                    </ul>
+                                    <button onClick={handleClick} className="bg-burgundy text-white" type="button" disabled={isLoading}>
+                                        Read my Specials
+                                    </button>
+                                    <button>
+                                        Choose a different photo
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                    {prevSpecials}
+                </div>
             )}
 
             {/* Loading state */}
@@ -77,7 +129,7 @@ export default function UploadForm() {
 
             {/* entire menu object, including concerns */}
             {draft && (
-                <ReviewForm draft={draft} setDraft={setDraft}/>
+                <ReviewForm draft={draft} setDraft={setDraft} />
             )}
 
 
