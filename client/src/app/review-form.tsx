@@ -68,48 +68,52 @@ export default function ReviewForm({ draft, setDraft }: { draft: Menu; setDraft:
 
 
     return (
-        <div className="w-full max-w-2xl">
-            <h1 className='text-center text-3xl'>Edit Specials List</h1>
-            <h3 className='text-center text-lg'>Week of: {draft.day}</h3>
+        <div className="w-full max-w-2xl self-center flex flex-col gap-4 mb-8">
+            <p className='text-center text-2xl'>REVIEW YOUR SPECIALS</p>
+            <p className="text-center text-muted">Here&apos;s what we read from your photo. Click any line to fix spelling or add a price.</p>
 
             {/* specials list */}
-            <ul className='border border-foreground'>
-                {/* column labels */}
-                <div className='flex justify-between'>
-                    <h1 className='pl-2 border border-foreground flex-9'>Specials</h1>
-                    <h1 className='border border-foreground flex-1 min-w-0 text-center'>Price</h1>
-                </div>
+            <div className="bg-surface">
+                <p className='text-center text-lg border border-b-0'>Week of: {draft.day}</p>
+                <ul>
+                    {/* column labels */}
+                    <div className='flex justify-between'>
+                        <h1 className='pl-2 border flex-9'>Specials</h1>
+                        <h1 className='border border-l-0 flex-1 min-w-0 text-center'>Price</h1>
+                    </div>
 
-                {/* individual rows */}
-                {draft.specials.map((s, index) => (
-                    <li key={index} className='justify-between border border-foreground flex'>
-                        <textarea className='p-2 border border-foreground flex-9 min-w-0 resize-none' rows={3} value={s.sentence} onChange={e => setDraft({ ...draft, specials: draft.specials.map((item, i) => i === index ? { ...item, sentence: e.target.value } : item) })} />
-                        <input className='border border-foreground flex-1 min-w-0 text-center' type="text" placeholder="$" value={s.price ?? ""} onChange={e => setDraft({ ...draft, specials: draft.specials.map((item, i) => i === index ? { ...item, price: e.target.value } : item) })} />
-                    </li>
-                ))}
-            </ul>
+                    {/* individual rows */}
+                    {draft.specials.map((s, index) => (
+                        <li key={index} className='justify-between flex'>
+                            <textarea className='p-2 border border-t-0 flex-9 min-w-0 resize-none' rows={3} value={s.sentence} onChange={e => setDraft({ ...draft, specials: draft.specials.map((item, i) => i === index ? { ...item, sentence: e.target.value } : item) })} />
+                            <input className='border border-l-0 border-t-0 flex-1 min-w-0 text-center' type="text" placeholder="$" value={s.price ?? ""} onChange={e => setDraft({ ...draft, specials: draft.specials.map((item, i) => i === index ? { ...item, price: e.target.value } : item) })} />
+                        </li>
+                    ))}
+                </ul>
 
+            </div>
             {/* concerns & toggle on/off concerns */}
             {draft.concerns && (
-                <>
+                <div className="bg-surface rounded-2xl">
                     <form onSubmit={handleToggleConcerns}>
                         <button type="submit" className='pl-2 my-2'>{displayConcerns ? 'Hide Concerns' : 'Display Concerns'}</button>
                     </form>
                     {displayConcerns && (
-                        <div className='border-foreground border-3 p-4'>
+                        <div className='p-4'>
                             <p>{draft.concerns}</p>
                         </div>
                     )}
-                </>
+                </div>
             )}
 
 
             {/* Continue button */}
-            <p className='font-bold my-2 text-center'>Edit any mistakes. Hit Continue when finished.</p>
-
-            <form onSubmit={handleContinue} className='text-center'>
-                <button type="submit" className='border rounded border-foreground bg-foreground text-background text-sm'>Continue</button>
-            </form>
+            <div className="ml-auto flex gap-x-4 items-center">
+                <p className="text-muted">{draft.specials.length} specials</p>
+                <form onSubmit={handleContinue} className=''>
+                    <button type="submit" className='bg-burgundy py-2 px-4 rounded text-white'>Continue</button>
+                </form>
+            </div>
 
         </div>
     )
