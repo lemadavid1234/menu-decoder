@@ -75,7 +75,10 @@ export default function ReviewForm({ draft, setDraft, reset }: { draft: Extracte
 
             {/* specials list */}
             <div className="bg-surface">
-                <p className='text-center text-lg border border-b-0'>Week of: {draft.day}</p>
+                <p className='flex gap-2 items-center justify-center text-center text-lg border border-b-0'>
+                    <span>Week of:</span>
+                    <input type="date" value={draft.day} onChange={e => setDraft({ ...draft, day: e.target.value})}/>
+                </p>
                 <ul>
                     {/* column labels */}
                     <div className='flex justify-between'>
