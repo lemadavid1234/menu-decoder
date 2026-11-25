@@ -1,14 +1,14 @@
 "use client";
-import { Menu } from '../types/menu';
+import { ExtractedMenu } from '../types/menu';
 import { useState } from 'react'
 import ReviewForm from './review-form';
 import { CameraIcon } from 'lucide-react';
 
 
-export default function UploadForm({ prevSpecials }: { prevSpecials: React.ReactNode} ) {
+export default function UploadForm({ prevSpecials }: { prevSpecials: React.ReactNode }) {
 
-    const [menu, setMenu] = useState<Menu>();
-    const [draft, setDraft] = useState<Menu>();
+    const [menu, setMenu] = useState<ExtractedMenu>();
+    const [draft, setDraft] = useState<ExtractedMenu>();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string>()
     const [previewURL, setPreviewURL] = useState<string>();
@@ -89,7 +89,7 @@ export default function UploadForm({ prevSpecials }: { prevSpecials: React.React
             {/* Choose File & Submit Button field */}
             {!draft && (
                 <div className='flex flex-col gap-8 lg:flex-row'>
-                    <div className='flex-2 bg-surface rounded-2xl p-4'>
+                    <div className='flex-2 flex flex-col justify-center bg-surface rounded-2xl p-4'>
                         {!file ? (
                             <div className="flex flex-col gap-4 items-center">
                                 <div className="p-4 rounded-full bg-burgundy-tint">
@@ -97,15 +97,15 @@ export default function UploadForm({ prevSpecials }: { prevSpecials: React.React
                                 </div>
                                 <p className='text-xl font-bold'>Got a new specials sheet?</p>
                                 <p className='max-w-xl text-center'>Upload a photo of your specials and we&apos;ll turn it into notes you can study before your shift.</p>
-                                <label className='p-2 bg-burgundy text-white cursor-pointer'>
+                                <label className='p-2 bg-burgundy hover:bg-burgundy-dark text-white cursor-pointer'>
                                     Upload your specials
                                     <input type="file" name="photo" accept="image/png, image/jpeg" onChange={handleFileChange} className='sr-only' />
                                 </label>
                             </div>
                         ) : (
-                            <div className="flex flex-col gap-4 lg:flex-row lg:h-96">
-                                <div className="flex-1 flex items-center">
-                                    <img src={previewURL} alt="Selected photo preview" />
+                            <div className="flex flex-col gap-4 lg:flex-row lg:h-96 items-center">
+                                <div className="flex-1 flex">
+                                    <img src={previewURL} alt="Selected photo preview" className='max-h-80 w-auto object-contain'/>
                                 </div>
                                 <div className="flex-2 flex flex-col gap-y-2">
                                     <p>✔ Photo Ready</p>
@@ -129,13 +129,6 @@ export default function UploadForm({ prevSpecials }: { prevSpecials: React.React
                     </div>
                     {prevSpecials}
                 </div>
-            )}
-
-            {/* Loading state */}
-            {isLoading && (
-                <>
-                    <h2>Currently extracting text from photo...</h2>
-                </>
             )}
 
             {/* entire menu object, including concerns */}
