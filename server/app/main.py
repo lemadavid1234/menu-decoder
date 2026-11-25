@@ -10,6 +10,7 @@ from app.llm import get_text_from_llm, LLMError, get_explanation_from_llm
 # from app.schemas import Menu #note: from app import models, schema --> use models.Menu and schemas.Menu to avoid overwriting each other
 from app import models
 from app import schemas
+from sqlalchemy import select
 
 app = FastAPI()
 
@@ -87,7 +88,20 @@ def create_menu(confirmed_menu: schemas.ConfirmedMenu, db: Session = Depends(get
 
 
 
-@app.get("/api/menus/{menu_id}", response_model=schemas.ConfirmedMenu)
+@app.get("/api/menus/latest", response_model=schemas.SavedMenu | None)
+def get_latest_menu(db: Session = Depends(get_db)):
+
+    stmt = select(models.Menu).order_by(models.Menu.day.desc())
+    db_latest_menu = db.scalars(stmt).first()
+
+    #user's first login with no history shouldn't be a failure but instead None
+    if not db_latest_menu:
+        return None
+    
+    return db_latest_menu
+
+
+@app.get("/api/menus/{menu_id}", response_model=schemas.SavedMenu)
 def get_menu_by_id(menu_id: int, db: Session = Depends(get_db)):
 
     #returns SQLAlchemy object, which represents a database row
