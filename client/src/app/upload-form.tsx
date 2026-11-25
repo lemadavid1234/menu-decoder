@@ -116,12 +116,13 @@ export default function UploadForm({ prevSpecials }: { prevSpecials: React.React
                                         <li>The dish names and prices are sharp, not blurry</li>
                                         <li>It&apos;s this week&apos;s sheet</li>
                                     </ul>
-                                    <button onClick={handleClick} className="bg-burgundy text-white" type="button" disabled={isLoading}>
-                                        Read my Specials
+                                    <button onClick={handleClick} className="p-2 bg-burgundy rounded hover:bg-burgundy-dark text-white disabled:opacity-60 disabled:cursor-not-allowed" type="button" disabled={isLoading}>
+                                        {!isLoading ? "Read my Specials" : "Loading your Specials..."}
                                     </button>
-                                    <button>
-                                        Choose a different photo
-                                    </button>
+                                    <label className='p-2 border border-ink rounded cursor-pointer text-center'>
+                                        Choose another photo
+                                        <input type="file" name="photo" accept="image/png, image/jpeg" onChange={handleFileChange} className='sr-only' disabled={isLoading} />
+                                    </label>
                                 </div>
                             </div>
                         )}
