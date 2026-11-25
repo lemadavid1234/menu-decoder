@@ -71,6 +71,16 @@ export default function UploadForm({ prevSpecials }: { prevSpecials: React.React
         }
     }
 
+    const reset = () => {
+        setDraft(undefined)
+        setFile(null)
+        setMenu(undefined)
+        setError(undefined)
+        if (previewURL) {
+            URL.revokeObjectURL(previewURL)
+        }
+    }
+
 
     return (
         //entire component
@@ -129,7 +139,7 @@ export default function UploadForm({ prevSpecials }: { prevSpecials: React.React
 
             {/* entire menu object, including concerns */}
             {draft && (
-                <ReviewForm draft={draft} setDraft={setDraft} />
+                <ReviewForm draft={draft} setDraft={setDraft} reset={reset} />
             )}
 
 

@@ -3,7 +3,7 @@ import { ExtractedMenu, ConfirmedMenu } from "../types/menu";
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 
-export default function ReviewForm({ draft, setDraft }: { draft: ExtractedMenu; setDraft: (menu: ExtractedMenu) => void; }) {
+export default function ReviewForm({ draft, setDraft, reset }: { draft: ExtractedMenu; setDraft: (menu: ExtractedMenu) => void; reset: () => void; }) {
     
     const [displayConcerns, setDisplayConcerns] = useState(false);
     const router = useRouter();
@@ -49,6 +49,7 @@ export default function ReviewForm({ draft, setDraft }: { draft: ExtractedMenu; 
             const id = data.id;
             console.log(`this is the uploaded menu's id: ${id}`);
 
+            reset();
             navigateToAnalysis(id);
 
         } catch (err) {
