@@ -6,8 +6,8 @@ type Special = {
 }
 
 
-export type Menu = {
-    specials: Special[],
+export type ExtractedMenu = {
+    specials: Special[]
     day: string | null, //since res.json() gives a string, and typescript type is just a label
     concerns: string | null,
     is_special: boolean
@@ -15,10 +15,15 @@ export type Menu = {
 
 
 export type ConfirmedMenu = {
-    specials: Special[],
+    specials: Special[]
     day: string | null
 }
 
+export type SavedMenu = {
+    id: number
+    specials: Special[]
+    day: string | null
+}
 
 export type ExplainedSpecial = {
     sentence: string

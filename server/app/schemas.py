@@ -5,28 +5,33 @@ from pydantic import ConfigDict, Field
 
 #pydantic models aka contracts or schemas
 
-class Special(BaseModel):
+# fields every special has: sentence, price. "Base" is FastAPI's convention for shared fields
+class SpecialBase(BaseModel):
     sentence: str
     price: str | None = None
     model_config = ConfigDict(from_attributes=True)
 
-
-class Menu(BaseModel):
-    specials: List[Special]
+# what claude read from the photo
+class ExtractedMenu(BaseModel):
+    specials: List[SpecialBase]
     day: date
     concerns: str | None = None
     is_special: bool
 
 # input for claude llm
 class ConfirmedMenu(BaseModel):
-    specials: List[Special] = Field(min_length=1) #rejects "specials": [] therefore list needs at least 1 item
+    specials: List[SpecialBase] = Field(min_length=1) #rejects "specials": [] therefore list needs at least 1 item
     day: date
 
     #model_config is a setting that Pydantic reads from classes that inherit from Basemodel
     model_config = ConfigDict(from_attributes=True)
 
+# menu loaded from the database: the GET response
+class SavedMenu(ConfirmedMenu):
+    id: int
 
-class ExplanationFields(BaseModel):
+# claudes explanation of one special
+class SpecialExplanation(BaseModel):
     # sentence: str             # Claude will rewrite sentence & price if passed this model to output schema
     # price: str | None = None  # therefore, create two separate pydantic models
     position: int # to save the positioning and easily match (keeping specials in order)
@@ -38,12 +43,11 @@ class ExplanationFields(BaseModel):
     origin: str | None = None
     pronunciation: str
 
-#output_format for claude llm
-class ExplanationFieldsList(BaseModel):
-    specials: List[ExplanationFields]
+#output_format for claude llm, aka claude's structured output for the whole menu
+class MenuExplanation(BaseModel):
+    specials: List[SpecialExplanation]
 
-
-class ExplainedSpecial(ExplanationFields):
+class ExplainedSpecial(SpecialExplanation):
     sentence: str
     price: str | None = None
 

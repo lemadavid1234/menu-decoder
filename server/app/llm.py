@@ -4,7 +4,7 @@ import base64
 from typing import Literal
 from pydantic import ValidationError
 
-from app.schemas import Menu, ConfirmedMenu, ExplanationFieldsList
+from app.schemas import ExtractedMenu, ConfirmedMenu, MenuExplanation
 from app.config import ANTHROPIC_API_KEY
 
 
@@ -21,7 +21,7 @@ EXPLANATION_MODEL = "claude-opus-5-5"
 
 
 # function that prompts Anthropic
-def get_text_from_llm(content_bytes: bytes, content_type: Literal['image/jpeg', 'image/png']) -> Menu:
+def get_text_from_llm(content_bytes: bytes, content_type: Literal['image/jpeg', 'image/png']) -> ExtractedMenu:
 
     base64_encoded_string = base64.b64encode(content_bytes).decode("utf-8")
     try:
@@ -56,7 +56,7 @@ def get_text_from_llm(content_bytes: bytes, content_type: Literal['image/jpeg', 
                         ],
                     }
                 ],
-            output_format=Menu,
+            output_format=ExtractedMenu,
         )
     except APIError as e:
         raise LLMError(f"Claude Issue during extraction pipeline {e}") from e
@@ -73,7 +73,7 @@ def get_text_from_llm(content_bytes: bytes, content_type: Literal['image/jpeg', 
     # text = "".join(b.text for b in response.content if b.type == "text")
     
     structured_response = response.parsed_output
-    if not isinstance(structured_response, Menu):
+    if not isinstance(structured_response, ExtractedMenu):
         raise LLMError("Could not provide proper Menu structured output")
     
     return structured_response
@@ -82,7 +82,7 @@ def get_text_from_llm(content_bytes: bytes, content_type: Literal['image/jpeg', 
 
 
 
-def get_explanation_from_llm(menu: ConfirmedMenu) -> ExplanationFieldsList:
+def get_explanation_from_llm(menu: ConfirmedMenu) -> MenuExplanation:
 
 
     #claude takes input as text, therefore first have to create a text block from menu parameter
@@ -116,16 +116,16 @@ def get_explanation_from_llm(menu: ConfirmedMenu) -> ExplanationFieldsList:
                         ],
                     }
                 ],
-            output_format=ExplanationFieldsList,
+            output_format=MenuExplanation,
         )
     except APIError as e:
         raise LLMError(f"Claude Issue during Explanation Pipeline: {e}") from e
     except ValidationError as e:
-        raise LLMError(f"Claude response did not match your ExplanationFieldsList schema: {e}") from e
+        raise LLMError(f"Claude response did not match your MenuExplanation schema: {e}") from e
 
     structured_response = response.parsed_output
 
-    if not isinstance(structured_response, ExplanationFieldsList):
-        raise LLMError("Could not provided proper ExplanationFieldsList structured output")
+    if not isinstance(structured_response, MenuExplanation):
+        raise LLMError("Could not provided proper MenuExplanation structured output")
 
     return structured_response

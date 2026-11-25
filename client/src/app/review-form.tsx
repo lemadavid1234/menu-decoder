@@ -1,9 +1,9 @@
 "use client";
-import { Menu, ConfirmedMenu } from "../types/menu";
+import { ExtractedMenu, ConfirmedMenu } from "../types/menu";
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 
-export default function ReviewForm({ draft, setDraft }: { draft: Menu; setDraft: (menu: Menu) => void; }) {
+export default function ReviewForm({ draft, setDraft }: { draft: ExtractedMenu; setDraft: (menu: ExtractedMenu) => void; }) {
     
     const [displayConcerns, setDisplayConcerns] = useState(false);
     const router = useRouter();

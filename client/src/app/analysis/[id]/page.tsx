@@ -1,4 +1,4 @@
-import { Menu } from "@/types/menu";
+import { SavedMenu } from "@/types/menu";
 import ExplainedSpecials from "./explained-specials"
 import SpecialsSkeleton from "./specials-skeleton";
 import { Suspense } from "react";
@@ -22,7 +22,7 @@ export default async function AnalysisPage({ params } : { params: Promise<{id: s
         throw new Error(`Issue calling GET on /api/menus/${id} with status: ${res.status}`);
     }
     
-    const menu: Menu = await res.json();
+    const menu: SavedMenu = await res.json();
 
 
 
